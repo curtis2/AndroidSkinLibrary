@@ -1,15 +1,13 @@
 package com.simon.skin.attr;
 
-import android.app.Activity;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.simon.skin.R;
-import com.simon.skin.constant.SkinConfig;
+import com.simon.skin.contant.SkinConfig;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * auther: elliott zhang
  * Emaill:18292967668@163.com
@@ -17,76 +15,59 @@ import java.util.List;
 
 public class SkinAttrSupport {
 
-    public static List<SkinView> getSkinViews(Activity activity) {
-        List<SkinView> skinViews=new ArrayList<>();
-        View view= activity.findViewById(android.R.id.content);
-        addSkinViews(view,skinViews);
-        return  skinViews;
-    }
-
-
-    private static void addSkinViews(View view, final List<SkinView> skinViews) {
-        SkinView skinView=getSkinView(view);
+    public static void getSkinViews(View view, List<SkinView> skinViews) {
+        SkinView skinView= getSkinView(view);
         if(skinView!=null)skinViews.add(skinView);
-        if(view instanceof  ViewGroup){
-            ViewGroup container=(ViewGroup)view;
-            for (int i = 0; i <container.getChildCount() ; i++) {
-                View childAt = container.getChildAt(i);
-                addSkinViews(childAt,skinViews);
-            }
-        }
+        if(view instanceof ViewGroup){
+            ViewGroup viewGroup= (android.view.ViewGroup) view;
+             for (int i = 0; i <viewGroup.getChildCount(); i++) {
+                 View childAt = viewGroup.getChildAt(i);
+                 getSkinViews(childAt,skinViews);
+             }
+         }
     }
 
-    private static SkinView getSkinView(View view) {
-        Object tag = view.getTag(R.id.skin_tag_id);
-         if(tag==null){
-             tag=view.getTag();
-         }
-         if(tag==null)return null;
+    private static  SkinView getSkinView(View view) {
+        Object tag = view.getTag();
+        if(tag==null)return null;
+        if(!(tag instanceof String))return null;
+        String tagStr= (String) tag;
 
-         if(!(tag instanceof String))return null;
+        List<SkinAttr> skinAttrs=parseTag(tagStr);
 
-         String tagStr=(String)tag;
+        if(skinAttrs!=null&&!skinAttrs.isEmpty()){
 
-         List<SkinAttr> skinAttrs=parseTag(tagStr);
-
-         if(!skinAttrs.isEmpty()){
-            changeViewTag(view);
-             return new SkinView(view,skinAttrs);
-         }
-         return null;
-    }
-
-    private static void changeViewTag(View view) {
-        Object tag = view.getTag(R.id.skin_tag_id);
-        if(tag==null){
-            tag=view.getTag();
-            view.setTag(R.id.skin_tag_id,tag);
-            view.setTag(null);
+            return  new SkinView(view,skinAttrs);
         }
+        return  null;
     }
 
     private static List<SkinAttr> parseTag(String tagStr) {
         List<SkinAttr> skinAttrs=new ArrayList<>();
-        if(TextUtils.isEmpty(tagStr))return skinAttrs;
-        String[] items=tagStr.split("[|]");
-        for(String item:items){
-           if(!item.startsWith(SkinConfig.SKIN_PREFIX))continue;
-            String[] resItems=tagStr.split("[|]");
-            if(resItems.length!=3)continue;
-
-            String resName=resItems[1];
-            String resType=resItems[2];
-            SkinAttrType attrType= getSupportAttrType(resType);
-            SkinAttr attr=new SkinAttr(attrType,resName);
-            if(attrType==null)continue;
-            skinAttrs.add(attr);
+        String[] skinStrs= tagStr.split("[|]");
+        if(skinStrs!=null&&skinStrs.length>0){
+           for(String skinItemStr:skinStrs){
+               if(skinItemStr.startsWith(SkinConfig.SKIN_PRESUFFIX)){
+                   String[] items = skinItemStr.split(":");
+                   if(items!=null&&items.length==3){
+                       String resName=items[1];
+                       String resType=items[2];
+                       SkinAttrType SkinAttrType=getSupportType(resType);
+                       SkinAttr attr=new SkinAttr(SkinAttrType,resName);
+                       if(SkinAttrType!=null) skinAttrs.add(attr);
+                   }
+               }
+           }
         }
-        return null;
+        return skinAttrs;
     }
 
-    private static SkinAttrType getSupportAttrType(String resType) {
-
+    private static SkinAttrType getSupportType(String resType) {
+        for (SkinAttrType type:SkinAttrType.values()){
+            if(type.getAttrTypeName().equals(resType)){
+                return type;
+            }
+        }
         return null;
     }
 

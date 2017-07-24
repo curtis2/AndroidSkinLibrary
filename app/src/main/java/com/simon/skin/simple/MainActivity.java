@@ -12,8 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.simon.skin.R;
 import com.simon.skin.SkinManager;
+import com.simon.skin.simple.utils.CrashHandleUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,7 +23,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private ListView mListView;
     private String mSkinPkgPath = Environment.getExternalStorageDirectory() + File.separator + "skin_plugin.apk";
-
     private List<String> mDatas = new ArrayList<String>(Arrays.asList("Activity", "Service", "Activity", "Service",
             "Activity", "Service", "Activity", "Service","Activity", "Service", "Activity", "Service",
             "Activity", "Service", "Activity", "Service","Activity", "Service", "Activity", "Service",
@@ -37,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        CrashHandleUtil.getmInstance().init(this,"sample");
+        SkinManager.getmInstance().init(this);
         SkinManager.getmInstance().register(this);
         initViews();
     }
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     convertView = LayoutInflater.from(MainActivity.this).inflate(R.layout.item, parent , false);
                 }
-//              SkinManager.getInstance().injectSkin(convertView);
+                SkinManager.getmInstance().injectSkin(convertView);
                 TextView tv = (TextView) convertView.findViewById(R.id.id_tv_title);
                 tv.setText(getItem(position));
                 return convertView;
@@ -73,13 +74,11 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id)
         {
-            case R.id.id_action_plugin_skinchange:
+            case R.id.day:
+                SkinManager.getmInstance().changeSkin("day");
                 break;
-            case R.id.id_action_remove_any_skin:
-                break;
-            case R.id.id_action_notify_lv:
-                break;
-            case R.id.id_action_dynamic:
+            case R.id.night:
+                SkinManager.getmInstance().changeSkin("night");
                 break;
         }
 

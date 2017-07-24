@@ -2,26 +2,14 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".simple.MainActivity">
-    <item android:id="@+id/id_action_plugin_skinchange"
+    <item android:id="@+id/day"
           android:orderInCategory="100"
-          android:title="插件式换肤"
+          android:title="日间模式"
           app:showAsAction="never"/>
     <item
-        android:id="@+id/id_action_remove_any_skin"
+        android:id="@+id/night"
         android:orderInCategory="100"
-        android:title="恢复默认"
+        android:title="夜间模式"
         app:showAsAction="never"/>
 
-
-    <item
-        android:id="@+id/id_action_notify_lv"
-        android:orderInCategory="100"
-        android:title="修改ListView的数据"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/id_action_dynamic"
-        android:orderInCategory="100"
-        android:title="测试动态增加View"
-        app:showAsAction="never"/>
 </menu>

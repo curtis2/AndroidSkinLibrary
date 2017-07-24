@@ -1,4 +1,4 @@
-package com.simon.skin.constant;
+package com.simon.skin.contant;
 
 /**
  * auther: elliott zhang
@@ -6,6 +6,5 @@ package com.simon.skin.constant;
  */
 
 public class SkinConfig {
-  public static final String SKIN_PREFIX="skin:";
-
+    public static final String SKIN_PRESUFFIX="skin:";
 }

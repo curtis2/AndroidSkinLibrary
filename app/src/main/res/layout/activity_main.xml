@@ -4,16 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.simon.skin.simple.MainActivity"
-    android:tag="skin:left_menu_icon:src"
     >
 
     <ListView
         android:id="@+id/id_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffffff"
-        android:padding="16dp"
         >
     </ListView>
 
 </LinearLayout>
+
+
